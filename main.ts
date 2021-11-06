@@ -8,13 +8,17 @@ radio.onReceivedNumber(function (receivedNumber) {
 })
 radio.onReceivedValue(function (name, value) {
     if ("N" == name) {
+        basic.showArrow(ArrowNames.North)
         minibit.go(mbDirection.Forward, Math.map(value, 550, 1023, 10, 255))
     } else if ("S" == name) {
+        basic.showArrow(ArrowNames.South)
         minibit.go(mbDirection.Reverse, Math.map(value, 0, 450, 255, 10))
     } else if ("W" == name) {
+        basic.showArrow(ArrowNames.West)
         minibit.move(mbMotor.Left, mbDirection.Forward, Math.map(value, 550, 1023, 10, 255))
         minibit.move(mbMotor.Right, mbDirection.Forward, 20)
     } else if ("O" == name) {
+        basic.showArrow(ArrowNames.East)
         minibit.move(mbMotor.Left, mbDirection.Forward, 20)
         minibit.move(mbMotor.Right, mbDirection.Forward, Math.map(value, 0, 450, 255, 10))
     } else {
