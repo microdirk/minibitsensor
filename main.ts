@@ -1,11 +1,42 @@
 radio.onReceivedNumber(function (receivedNumber) {
     basic.showNumber(receivedNumber)
     if (receivedNumber == 0) {
+        basic.showIcon(IconNames.Yes)
         minibit.go(mbDirection.Forward, 20)
     } else {
-        minibit.stop(mbStopMode.Coast)
+    	
     }
 })
+function checkEdge () {
+    if (9 > minibit.sonar(mbPingUnit.Centimeters)) {
+        minibit.stop(mbStopMode.Brake)
+        basic.showIcon(IconNames.No)
+        minibit.goms(mbDirection.Reverse, 60, 600)
+        minibit.rotatems(mbRobotDirection.Left, 60, 300)
+    }
+    if (minibit.lineSensor(mbLineSensors.Left)) {
+        minibit.stop(mbStopMode.Brake)
+        basic.showArrow(ArrowNames.West)
+        minibit.move(mbMotor.Right, mbDirection.Reverse, 60)
+        minibit.move(mbMotor.Left, mbDirection.Forward, 30)
+        basic.pause(500)
+    }
+    if (minibit.lineSensor(mbLineSensors.Centre)) {
+        minibit.stop(mbStopMode.Brake)
+        minibit.goms(mbDirection.Reverse, 60, 600)
+        minibit.rotatems(mbRobotDirection.Right, 60, 300)
+        basic.showIcon(IconNames.Sword)
+    }
+    if (minibit.lineSensor(mbLineSensors.Right)) {
+        minibit.stop(mbStopMode.Brake)
+        basic.showArrow(ArrowNames.East)
+        minibit.move(mbMotor.Right, mbDirection.Forward, 30)
+        minibit.move(mbMotor.Left, mbDirection.Reverse, 60)
+        basic.pause(500)
+    }
+    minibit.move(mbMotor.Right, mbDirection.Forward, 30)
+    minibit.move(mbMotor.Left, mbDirection.Forward, 60)
+}
 radio.onReceivedValue(function (name, value) {
     if ("N" == name) {
         basic.showArrow(ArrowNames.North)
@@ -34,14 +65,6 @@ basic.showLeds(`
     . . # . .
     `)
 basic.forever(function () {
-	
-})
-loops.everyInterval(100, function () {
-    if (9 > minibit.sonar(mbPingUnit.Centimeters)) {
-        minibit.stop(mbStopMode.Coast)
-        minibit.move(mbMotor.Left, mbDirection.Reverse, 60)
-        basic.pause(500)
-        minibit.rotatems(mbRobotDirection.Left, 60, 100)
-        minibit.go(mbDirection.Forward, 20)
-    }
+    checkEdge()
+    basic.pause(100)
 })
